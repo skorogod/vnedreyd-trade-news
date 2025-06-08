@@ -1,0 +1,3065 @@
+{
+  "name": "main",
+  "nodes": [
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f73157a8-8c60-49e9-be2d-47133ab87d85",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "79b04d38-cece-4f20-9cc0-df8db4a76edc",
+              "name": "link",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "d831822a-b553-4d57-a974-b1bca4602233",
+              "name": "content",
+              "value": "={{ $json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "1f6595b7-6f8f-4c0c-a01c-7aea19236d7b",
+              "name": "categories",
+              "value": "={{ $json.categories }}",
+              "type": "array"
+            },
+            {
+              "id": "d8e654dc-551f-4784-bf61-e1f7d6ec32cf",
+              "name": "date",
+              "value": "={{ $json.isoDate }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -160,
+        1740
+      ],
+      "id": "3e3a7998-f84e-47f9-b99f-9ae8bab92ca9",
+      "name": "Edit Fields"
+    },
+    {
+      "parameters": {
+        "content": "## Data model\n```\n{\ntitle: text\nlink: text\ncontent: text\ndate: date\ncategories: [str]\nco\n}\n```",
+        "height": 200,
+        "width": 360
+      },
+      "type": "n8n-nodes-base.stickyNote",
+      "typeVersion": 1,
+      "position": [
+        40,
+        960
+      ],
+      "id": "67b0c7f2-597b-4091-9084-df542fbb4dff",
+      "name": "Sticky Note"
+    },
+    {
+      "parameters": {},
+      "type": "n8n-nodes-base.merge",
+      "typeVersion": 3.2,
+      "position": [
+        740,
+        1420
+      ],
+      "id": "2f5c9c47-798b-4dc7-8a3c-56e5fddc13fe",
+      "name": "Merge"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "f73157a8-8c60-49e9-be2d-47133ab87d85",
+              "name": "title",
+              "value": "={{ $json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "79b04d38-cece-4f20-9cc0-df8db4a76edc",
+              "name": "link",
+              "value": "={{ $json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "d831822a-b553-4d57-a974-b1bca4602233",
+              "name": "content",
+              "value": "=\"\"",
+              "type": "string"
+            },
+            {
+              "id": "1f6595b7-6f8f-4c0c-a01c-7aea19236d7b",
+              "name": "categories",
+              "value": "={{ $json.categories }}",
+              "type": "array"
+            },
+            {
+              "id": "d8e654dc-551f-4784-bf61-e1f7d6ec32cf",
+              "name": "date",
+              "value": "={{ $json.isoDate }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        -360,
+        1320
+      ],
+      "id": "e7e47a88-5930-46f4-8481-422a6bb2645d",
+      "name": "Edit Fields5"
+    },
+    {
+      "parameters": {
+        "url": "={{ $json.link }}",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        80,
+        1320
+      ],
+      "id": "2d0513ad-c63a-4b54-83c2-c3e712500a18",
+      "name": "Get html",
+      "retryOnFail": true,
+      "waitBetweenTries": 5000,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "operation": "extractHtmlContent",
+        "extractionValues": {
+          "values": [
+            {
+              "key": "text",
+              "cssSelector": ".article-boxes-list"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.html",
+      "typeVersion": 1.2,
+      "position": [
+        300,
+        1320
+      ],
+      "id": "b687c99a-f34c-4126-a76c-879232455126",
+      "name": "Parse content article",
+      "alwaysOutputData": true,
+      "notesInFlow": false,
+      "onError": "continueRegularOutput"
+    },
+    {
+      "parameters": {
+        "action": "generate",
+        "dataPropertyName": "UUID"
+      },
+      "type": "n8n-nodes-base.crypto",
+      "typeVersion": 1,
+      "position": [
+        960,
+        1420
+      ],
+      "id": "ce8975c5-7a65-4887-92fd-a3f534ed16b8",
+      "name": "Crypto"
+    },
+    {
+      "parameters": {
+        "model": "nomic-embed-text:latest"
+      },
+      "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
+      "typeVersion": 1,
+      "position": [
+        1776,
+        1640
+      ],
+      "id": "74fc8ce0-fc6c-4f86-97b7-d71e71d36e09",
+      "name": "Embeddings Ollama1",
+      "credentials": {
+        "ollamaApi": {
+          "id": "cMbI7GQ4J6Ne4Ir1",
+          "name": "Ollama account"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
+      "typeVersion": 1,
+      "position": [
+        1896,
+        1642.5
+      ],
+      "id": "87c20a15-e622-49bd-ad8e-920844b5f082",
+      "name": "Default Data Loader"
+    },
+    {
+      "parameters": {
+        "chunkOverlap": 200,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
+      "typeVersion": 1,
+      "position": [
+        1984,
+        1840
+      ],
+      "id": "92a471f8-ceca-4f76-9ab7-3ac318b9013f",
+      "name": "Recursive Character Text Splitter"
+    },
+    {
+      "parameters": {
+        "mode": "insert",
+        "tableName": "annotation_vec",
+        "embeddingBatchSize": 768,
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
+      "typeVersion": 1.2,
+      "position": [
+        1792,
+        1420
+      ],
+      "id": "311837c6-25aa-4c84-996d-9c87922e54ff",
+      "name": "annotetion_to vec",
+      "credentials": {
+        "postgres": {
+          "id": "41cqfW0wiSndRo3q",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "schema": {
+          "__rl": true,
+          "mode": "list",
+          "value": "public"
+        },
+        "table": {
+          "__rl": true,
+          "value": "articles_top",
+          "mode": "name"
+        },
+        "columns": {
+          "mappingMode": "defineBelow",
+          "value": {
+            "id": "={{ $('Crypto').item.json.UUID }}",
+            "title": "={{ $('Merge').item.json.title }}",
+            "link": "={{ $('Merge').item.json.link }}",
+            "content": "={{ $('Crypto').item.json.content }}",
+            "date": "={{ $('Merge').item.json.date }}",
+            "categories": "={{ $('Merge').item.json.categories }}",
+            "summary": "={{ $('summary_field').item.json.summary }}"
+          },
+          "matchingColumns": [
+            "id"
+          ],
+          "schema": [
+            {
+              "id": "id",
+              "displayName": "id",
+              "required": true,
+              "defaultMatch": true,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "title",
+              "displayName": "title",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "summary",
+              "displayName": "summary",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "link",
+              "displayName": "link",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "string",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "categories",
+              "displayName": "categories",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "array",
+              "canBeUsedToMatch": true
+            },
+            {
+              "id": "date",
+              "displayName": "date",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "dateTime",
+              "canBeUsedToMatch": true
+            }
+          ],
+          "attemptToConvertTypes": false,
+          "convertFieldsToString": false
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.postgres",
+      "typeVersion": 2.6,
+      "position": [
+        2340,
+        1380
+      ],
+      "id": "e6fe02cb-c9cb-40ab-8628-e6772716e72f",
+      "name": "save_total",
+      "credentials": {
+        "postgres": {
+          "id": "41cqfW0wiSndRo3q",
+          "name": "Postgres account"
+        }
+      },
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "a509cca3-d245-4572-b0c3-8df9855cf18f",
+              "name": "summary",
+              "value": "={{ $json.output.text }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1556,
+        1420
+      ],
+      "id": "6ef2842b-03af-4ef1-abb7-af8825c0d075",
+      "name": "summary_field",
+      "alwaysOutputData": false,
+      "onError": "continueErrorOutput"
+    },
+    {
+      "parameters": {
+        "options": {
+          "summarizationMethodAndPrompts": {
+            "values": {
+              "combineMapPrompt": "=Write a concise summary of the following:\n\n\n {{ $json.content }}\n\n\nCONCISE SUMMARY:\n",
+              "prompt": "Write a concise summary of the following:\n\n\n\"{text}\"\n\n\nCONCISE SUMMARY:\n\nОтвет приведи строго на русском языке."
+            }
+          }
+        }
+      },
+      "type": "@n8n/n8n-nodes-langchain.chainSummarization",
+      "typeVersion": 2.1,
+      "position": [
+        1180,
+        1420
+      ],
+      "id": "aa936c2a-5f50-49bf-bd52-8d384619635f",
+      "name": "Summarization Chain"
+    },
+    {
+      "parameters": {
+        "options": {}
+      },
+      "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
+      "typeVersion": 1,
+      "position": [
+        1268,
+        1640
+      ],
+      "id": "3d49a546-b5ea-4ad4-ac92-10d5ccb48bd8",
+      "name": "Mistral Cloud Chat Model1",
+      "credentials": {
+        "mistralCloudApi": {
+          "id": "XDP3x1wGOfjM2voG",
+          "name": "Mistral Cloud account 2"
+        }
+      }
+    },
+    {
+      "parameters": {
+        "url": "https://www.vedomosti.ru/rss/rubric/finance",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        1220
+      ],
+      "id": "4db4572c-44bc-4a9d-ae9a-bb58fbb3ed54",
+      "name": "Ведомости финансы"
+    },
+    {
+      "parameters": {
+        "rule": {
+          "interval": [
+            {
+              "field": "minutes",
+              "minutesInterval": 1
+            }
+          ]
+        }
+      },
+      "type": "n8n-nodes-base.scheduleTrigger",
+      "typeVersion": 1.2,
+      "position": [
+        -800,
+        1420
+      ],
+      "id": "d016c991-eca3-408d-9a8c-768094ab4a7f",
+      "name": "Schedule Trigger"
+    },
+    {
+      "parameters": {
+        "url": "https://www.vedomosti.ru/rss/rubric/economics",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        -580,
+        1420
+      ],
+      "id": "0d12caa5-3922-473d-ac1e-00ee530e7ccc",
+      "name": "Ведомости экономика"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "04f3972b-3c9a-4616-a1c5-6b11c5b74160",
+              "name": "content",
+              "value": "={{ $json.text }}",
+              "type": "string"
+            },
+            {
+              "id": "4a421fc5-24b6-419e-a3dd-2257ce7814f6",
+              "name": "title",
+              "value": "={{ $('Edit Fields5').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "0377f74e-81c8-469b-b3b5-e74d4593dd2c",
+              "name": "link",
+              "value": "={{ $('Edit Fields5').item.json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "360beb4f-4421-45b1-b071-5cf62f83ee43",
+              "name": "categories",
+              "value": "={{ $('Edit Fields5').item.json.categories }}",
+              "type": "array"
+            },
+            {
+              "id": "ec8b425b-6b52-40aa-a7cb-2501a38ff24d",
+              "name": "date",
+              "value": "={{ $('Edit Fields5').item.json.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        520,
+        1320
+      ],
+      "id": "009521a7-72c0-4848-a603-3c763131167e",
+      "name": "Edit Fields1"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        -140,
+        1320
+      ],
+      "id": "8e5e97d6-3ec7-44dc-af62-45fb1e4a2dbe",
+      "name": "Limit"
+    },
+    {
+      "parameters": {
+        "url": "https://rssexport.rbc.ru/rbcnews/news/30/full.rss",
+        "options": {}
+      },
+      "type": "n8n-nodes-base.rssFeedRead",
+      "typeVersion": 1.1,
+      "position": [
+        -460,
+        1740
+      ],
+      "id": "b81acc63-8f97-4310-b0f9-86b3a50c83b7",
+      "name": "РБК"
+    },
+    {
+      "parameters": {
+        "maxItems": 10
+      },
+      "type": "n8n-nodes-base.limit",
+      "typeVersion": 1,
+      "position": [
+        100,
+        1720
+      ],
+      "id": "c94e9621-8b56-497f-9f8d-d6e6efe27b15",
+      "name": "Limit1"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  console.log($input.all())\n}\n\nreturn $input.all();"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2660,
+        1260
+      ],
+      "id": "c023d3ef-380b-4702-b25f-621a10c1aea6",
+      "name": "Code"
+    },
+    {
+      "parameters": {
+        "url": "http://score:8000",
+        "sendHeaders": true,
+        "headerParameters": {
+          "parameters": [
+            {}
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.httpRequest",
+      "typeVersion": 4.2,
+      "position": [
+        2880,
+        1260
+      ],
+      "id": "1acb49a3-cf99-42ea-a367-f90309ed08a2",
+      "name": "Get Score"
+    }
+  ],
+  "pinData": {
+    "Edit Fields5": [
+      {
+        "json": {
+          "title": "Путин подписал закон о защите граждан от нарушений со стороны коллекторов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/07/1115715-putin-podpisal-zakon",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-06-07T09:40:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ повысил официальный курс доллара до 79,17 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/06/1115644-tsb-povisil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-06-06T14:41:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Костин виртуально раздал 10 щелчков Пьянову после снижения ключевой ставки",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/06/1115615-kostin-razdal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-06T13:48:26.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Главные заявления Набиуллиной после снижения ключевой ставки",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/06/1115605-glavnie-zayavleniya-nabiullinoi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-06T13:43:58.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Сбербанк объявил о снижении ставок по вкладам и рыночной ипотеке",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/06/1115603-sberbank-obyavil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-06T13:18:19.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Набиуллина: ЦБ будет снижать ключевую ставку по мере замедления инфляции",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/06/1115602-tsb-budet-snizhat",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-06T13:10:18.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Как эксперты и аналитики отреагировали на снижение ключевой ставки ЦБ",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/06/1115590-kak-eksperti-otreagirovali",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-06T12:39:30.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Набиуллина: ЦБ рассматривал два варианта решения по ставке",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/06/1115593-rassmatrival-dva",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-06-06T12:22:18.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России снизил ключевую ставку впервые с 2022 года",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/06/1115537-bank-rossii-snizil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-06-06T10:33:47.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Турецкий бизнес практически не ушел из России после санкций",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/06/1115429-turetskii-biznes-prakticheski-ne-ushel-iz-rossii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-06-05T22:33:53.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "JPMorgan заблокировал иск ВТБ на $156 млн",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/05/1115406-jpmorgan-zablokiroval",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-05T16:56:52.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России поднял курс евро на 6 июня выше 90 рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/05/1115379-bank-rossii-podnyal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-05T14:45:17.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Европейский центральный банк понизил ставки восьмой раз подряд",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/05/1115321-evropeiskii-tsentralnii-bank",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-05T13:15:40.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк ВТБ запустился на российской платформе Max",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/05/1115102-bank-vtb-zapustilsya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-05T05:00:52.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Две трети россиян обладают базовым уровнем цифровой финансовой культуры",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/05/1115128-dve-treti-rossiyan-obladayut-bazovim-urovnem-tsifrovoi-finansovoi-kulturi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-06-04T22:35:04.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Потенциал роста вкладов за счет средств богатых россиян исчерпан",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/05/1115123-potentsial-rosta-vkladov-za-schet-bogatih-rossiyan-ischerpan",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-04T21:00:04.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России понизил курсы доллара и евро на 5 июня",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/04/1115073-bank-rossii-ponizil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-04T15:23:19.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ рассказал об использовании теневым бизнесом корпоративных карт для расчетов",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/04/1114983-tsb-rasskazal-ob-ispolzovanii-tenevim-biznesom-korporativnih-kart",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-04T11:14:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ рекомендовал банкам внимательнее следить за счетами дропперов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/04/1114975-tsb-rekomendoval-bankam",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-04T10:58:48.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Крепкий рубль может раздуть планы Минфина по выпуску ОФЗ",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/04/1114813-krepkii-rubl-mozhet-razdut-plani-minfina-po-vipusku-ofz",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-06-03T22:12:33.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Частные инвесторы вложили в розничные фонды почти в 10 раз меньше в I квартале",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/03/1114756-chastnie-investori-vlozhili",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-06-03T15:03:26.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Нацбанк Казахстана объявил о начале выпуска платежных «криптокарт»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/03/1114757-natsbank-kazahstana",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-06-03T14:58:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России понизил курс доллара на 4 июня до 78,85 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/03/1114754-bank-rossii-ponizil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-06-03T14:50:12.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ переходит на российские компьютеры и планшеты",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/03/1114489-vtb-perehodit-na-rossiiskie-kompyuteri-i-plansheti",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-02T21:11:16.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "С начала года страховщики продали более 1,6 млн коротких полисов ОСАГО",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/03/1114486-strahovschiki-prodali-bolee-16-mln-korotkih-polisov-osago",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-06-02T21:02:57.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "20-летний спор структуры «Русала» с таджикским заводом пошел на новый круг",
+          "link": "https://www.vedomosti.ru/business/articles/2025/06/03/1114485-20-letnii-spor-strukturi-rusala-s-tadzhikskim-zavodom-poshel-na-novii-krug",
+          "content": "\"\"",
+          "categories": [
+            "Бизнес"
+          ],
+          "date": "2025-06-02T21:02:17.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Центробанк поднял курс доллара выше 79 рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/06/02/1114513-tsentrobank-podnyal-kurs",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-02T15:33:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Зачем Совкомбанку перезапуск банка для хипстеров",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/06/02/1114260-zachem-sovkombanku-perezapusk-banka-dlya-hipsterov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-06-01T21:45:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Брокер «Финама» предложит «квалам» деривативы с привязкой к криптовалютам",
+          "link": "https://www.vedomosti.ru/investments/articles/2025/06/02/1114259-broker-finama-predlozhit-kvalam-derivativi-s-privyazkoi-k-kriptovalyutam",
+          "content": "\"\"",
+          "categories": [
+            "Инвестиции"
+          ],
+          "date": "2025-06-01T21:30:47.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Убыток «Почты России» по МСФО в I квартале вырос в 2,2 раза",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1114131-ubitok-pochti-rossii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-30T18:55:02.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Центробанк на выходные повысил курс доллара до 78,62 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1114117-tsentrobank-povisil-kurs",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T17:01:37.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Центробанк пояснил разницу между цифровым рублем и стейблкойном",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1114115-tsentrobank-poyasnil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-30T16:54:21.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Россельхозбанк рассматривает криптовалюту для расчетов при торговле зерном",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1114090-rosselhozbank-rassmatrivaet",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T16:00:10.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В I квартале 2025 года объем взносов по ПДС снизился до 39,2 млрд рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1114105-obem-vznosov-po-pds",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-30T15:48:11.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ может обновить банкноты в 100 рублей с учетом новых регионов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1113991-tsb-planiruet-obnovit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T11:19:56.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Сбербанк выпустил структурные облигации на биткойн",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1114000-sberbank-vipustil-strukturnie",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T11:17:47.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ опроверг данные о дате введения ограничений на снятие наличных в банкоматах",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1113947-tsb-oproverg",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T09:52:06.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Рокетбанк объявил о перезапуске",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1113886-roketbank-obyavil-o-perezapuske",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T08:00:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк ВТБ сократил чистую прибыль с начала года на 18,6%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/30/1113906-bank-vtb-sokratil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-30T07:47:44.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Сбермобайл» увеличил абонентскую базу почти в 2 раза за год",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/30/1113854-sbermobail-uvelichil-abonentskuyu-bazu",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-29T23:02:49.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банки блокируют счета платежных агентов и требуют комиссию с каждой сделки",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/30/1113835-banki-blokiruyut-scheta-platezhnih-agentov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-29T22:39:10.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Прибыль Газпромбанка по МСФО в I квартале 2025 года сократилась на 71%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113810-pribil-gazprombanka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-29T18:20:52.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ впервые с мая 2023 года понизил курс доллара до 78,49 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113779-tsb-vpervie-s-maya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-29T15:30:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Международные резервы РФ за неделю увеличились на $11 млрд",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113746-mezhdunarodnie-rezervi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-29T13:50:49.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России изменит подход к планированию проверок участников рынка",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113745-bank-rossii-izmenit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Профучастники"
+          ],
+          "date": "2025-05-29T13:47:00.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Внебиржевой курс доллара опустился ниже 78 рублей впервые с мая 2023 года",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113687-vnebirzhevoi-kurs-dollara",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-29T11:15:04.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Горшков покинул пост зампреда правления ВТБ",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113616-gorshkov-pokinul-post",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-29T08:52:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Курс доллара на Forex опустился ниже 79 рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113600-kurs-dollara-na-forex",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-29T08:11:20.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В Совкомбанке рассказали, откуда пошли слухи о заморозке вкладов",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/29/1113544-v-sovkombanke-rasskazali-otkuda-poshli-sluhi-o-zamorozke-vkladov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T23:52:53.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Профучастники запускают инструменты с привязкой к криптовалютам",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/29/1113548-profuchastniki-zapuskayut-instrumenti-s-privyazkoi-k-kriptovalyutam",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-28T23:40:20.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Совкомбанк получил средства из ФНБ в рамках финансирования стройки ВСМ",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/29/1113541-sovkombank-poluchil-sredstva-iz-fnb",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T23:39:05.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "У богатых клиентов рухнула лояльность к банкам",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/29/1113545-u-bogatih-klientov-ruhnula-loyalnost-k-bankam",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T23:19:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Сергей Хотимский: «Банки мы всегда покупали выгодно»",
+          "link": "https://www.vedomosti.ru/finance/characters/2025/05/29/1113543-sergei-hotimskii-banki-mi-vsegda-pokupali-vigodno",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T23:14:14.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Unicredit может покинуть Россию через связанные с «Альфа-групп» компании",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/29/1113554-unicredit-mozhet",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T21:44:16.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Прибыль банков России составила 261 млрд рублей в апреле",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/28/1113510-pribil-bankov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T17:07:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Центробанк понизил курс доллара на 29 мая до 79,6 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/28/1113472-ponizil-kurs-dollara",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-28T14:55:46.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ разрешил «квалам» пользоваться инструментами с привязкой к криптовалютам",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/28/1113402-tsb-razreshil-kvalam",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T12:20:34.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Объем потоков криптоактивов россиян превысил 7 трлн рублей",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/28/1113312-potokov-kriptoaktivov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-28T12:00:26.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ предложил отключать от госпрограмм банки с комиссиями для застройщиков",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/28/1113314-tsb-predlozhil-otklyuchat",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-28T12:00:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "UniCredit увеличивает долю в греческом Alpha Bank до 20%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/28/1113290-unicredit-uvelichivaet",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-28T08:45:27.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В РНПК рассказали о тенденциях российского рынка перестрахования",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/28/1113189-v-rnpk-rasskazali-o-tendentsiyah-rossiiskogo-rinka-perestrahovaniya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-27T22:14:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ: стабилизация инфляции в 2026 году потребует длительного периода жесткой ДКП",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/27/1113167-tsb-stabilizatsiya-inflyatsii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-27T16:41:54.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ повысил курс евро на 28 мая почти на 1 рубль",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/27/1113141-tsb-povisil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-27T15:18:17.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Чистая прибыль Россельхозбанка по МСФО в I квартале достигла 19,8 млрд рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/27/1113134-pribil-rosselhozbanka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-27T15:12:10.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ГД приняла в первом чтении проект об уголовной ответственности для дропперов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/27/1113061-gd-prinyala",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-27T13:26:59.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ФАС дважды оштрафовала Газпромбанк за ненадлежащую рекламу",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/27/1113083-fas-dvazhdi-oshtrafovala",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-27T13:09:26.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Bangkok Bank перестал открывать счета иностранцам с января",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/27/1113050-bangkok-bank-perestal-otkrivat",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-27T11:04:29.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ доработал концепцию регулирования вложений банков в непрофильные активы",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/27/1113011-tsb-dorabotal-kontseptsiyu",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-27T10:00:07.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Страхование грузов продолжает расти вместе с убыточностью",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/27/1112889-strahovanie-gruzov-prodolzhaet-rasti-vmeste-s-ubitochnostyu",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-26T23:16:58.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Bangkok Bank начал выборочную блокировку счетов россиян",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/26/1112878-bangkok-nachal-blokirovku",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-26T19:09:42.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Минпромторг расширил льготы на автокредитование",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/26/1112844-minpromtorg-lgoti",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-26T17:09:03.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ незначительно понизил курсы доллара и евро на 27 мая",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/26/1112832-tsb-neznachitelno-ponizil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-26T16:12:24.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ рекомендовал банкам реструктурировать кредиты компаний и ИП",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/26/1112753-tsb-rekomendoval",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-26T13:20:30.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Количество выданных ипотечных кредитов упало на 43% в апреле",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/26/1112709-kolichestvo-vidannih-ipotechnih",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-26T11:40:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Увеличились сроки страхового урегулирования крупных производственных убытков",
+          "link": "https://www.vedomosti.ru/business/news/2025/05/26/1112563-uvelichilis-sroki-strahovogo",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-26T04:39:19.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Займы сроком свыше года составили почти половину выдач в I квартале 2025 года",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/26/1112544-zaimi-srokom-svishe-goda-sostavili-pochti-polovinu-vidach",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-25T22:09:57.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Купившие украинские облигации инвесторы потеряли более 10%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/25/1112556-ukrainskie-investori-poteryali",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Профучастники"
+          ],
+          "date": "2025-05-25T19:58:27.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Bloomberg: ЕС изучает возможность отключения 20 банков от SWIFT",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/24/1112394-bloomberg-es-izuchaet",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-24T07:45:32.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Экспортная пошлина на пшеницу из России с 28 мая будет снижена на 12%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112367-eksportnaya-poshlina",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-23T18:26:38.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Bloomberg узнал об антимонопольной проверке Visa и Mastercard Еврокомиссией",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112366-antimonopolnoi-proverke",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-23T18:04:27.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "МВД предложило ввести тотальный базовый запрет брать кредиты",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/23/1112318-mvd-predlozhilo",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-23T15:01:30.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ понизил официальный курс доллара до 79,71 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112319-tsb-kurs-dollara",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-23T14:45:08.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Максимальная ставка по вкладам без спецусловий снизилась до 21,5%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112287-stavka-po-vkladam",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-23T13:34:42.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ выпустит памятные монеты в честь четырех футбольных клубов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112283-tsb-vipustit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-23T13:29:56.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "АСВ начнет выплаты кредиторам третьей очереди «Киви банка» 30 мая",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112215-asv-nachnet",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-23T10:31:15.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "МФО в I квартале сократили выдачу займов впервые с 2022 года на 1%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/23/1112191-mfo-v-i-kvartale",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-23T09:46:11.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Правительство продлило обязательную продажу валютной выручки экспортерами",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/22/1112073-pravitelstvo-prodlilo",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-22T17:30:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ с 2027 года хочет по-новому определять системно значимые банки",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/22/1111946-tsb-s-2027-goda-hochet-po-novomu-opredelyat-sistemno-znachimie",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-22T13:00:19.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Госдума в первом чтении одобрила законопроект о запуске цифрового рубля",
+          "link": "https://www.vedomosti.ru/politics/news/2025/05/22/1111927-gosduma-v-pervom",
+          "content": "\"\"",
+          "categories": [
+            "Политика"
+          ],
+          "date": "2025-05-22T11:36:48.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ФАС оштрафовала Альфа-банк за недостоверную рекламу кредитной карты",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/22/1111931-fas-oshtrafovala-alfa-bank",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-22T11:28:08.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ РФ отозвал лицензию банка «ИНЭКО»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/22/1111860-tsb-rf-otozval",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-22T08:06:15.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Т-технологии» получили контроль в совладельце «Точки»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/22/1111841-t-bank-poluchil-kontrol",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-22T07:00:45.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Портфель микрозаймов вырос в I квартале при сокращении выдач",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/22/1111791-portfel-mikrozaimov-viros-v-i-kvartale",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-21T21:00:03.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Акционеры Banco VTB Africa приняли решение о ликвидации",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/21/1111794-aktsioneri-vtb-africa",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-21T19:13:01.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Курс биткойна обновил исторический максимум и достиг $109 500",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/21/1111744-kurs-bitkoina",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-21T15:44:21.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ установил курс доллара на 22 мая ниже 80 рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/21/1111731-tsb-ustanovil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-21T15:07:50.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ и банки совместно будут контролировать операции с цифровыми рублями",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/21/1111701-operatsii-tsifrovimi-rublyami",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-21T14:06:00.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Чистая прибыль МТС-банка по МСФО в I квартале снизилась до 1 млрд рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/21/1111591-pribil-mts-banka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-21T09:11:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "НПФ Т-банка запустил свой продукт в рамках программы долгосрочных сбережений",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/21/1111520-npf-t-banka-zapustil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-21T07:00:44.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Как деэскалация изменит российский страховой рынок",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/21/1111488-kak-deeskalatsiya-izmenit-rossiiskii-strahovoi-rinok",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-20T21:36:02.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России понизил курс евро на 21 мая почти на рубль",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/20/1111440-bank-rossii-ponizil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-20T15:14:17.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Юникредит» остановит исходящие переводы в долларах для физлиц после 6 июня",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/20/1111346-yunikredit-ostanovit-perevodi-v-dollarah",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-20T11:49:56.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ видит востребованность цифрового рубля в трансграничных платежах",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/20/1111314-tsb-vidit-vostrebovannost",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-20T09:04:26.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Набиуллина видит большой потенциал в применении ИИ",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/20/1111303-nabiullina-vidit-bolshoi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-20T08:34:23.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Кубинские банки могут начать выпуск карт российской платежной системы «Мир»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/20/1111284-kubinskie-banki-mogut",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-20T07:57:07.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Рынок POS-кредитов сжимается под давлением высоких ставок",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/20/1111191-rinok-pos-kreditov-szhimaetsya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-19T22:02:33.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Эксперт РА» ухудшило прогнозы по прибыли банков и кредитованию на 2025 год",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/20/1111197-ekspert-ra-uhudshilo-prognozi-po-pribili-bankov-i-kreditovaniyu",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-19T21:00:08.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Минюст разработал законопроект об аресте и конфискации криптовалюты",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/19/1111052-minyust-razrabotal-zakonoproekt",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-19T15:51:23.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ понизил курсы доллара и евро на 20 мая",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/19/1111132-tsb-ponizil-kursi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-19T15:35:16.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Минфин предложил изъятую государством криптовалюту продавать участникам ЭПР",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/19/1111099-minfin-predlozhil-izyatuyu",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-19T14:44:38.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Минэк оценил присвоение первого с 2022 года суверенного рейтинга РФ за границей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/19/1111054-minek-otsenil-prisvoenie",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-19T12:11:25.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Россия получила первый после начала СВО суверенный рейтинг за границей",
+          "link": "https://www.vedomosti.ru/economics/articles/2025/05/19/1110888-rossiya-poluchila-pervii-posle-nachala-svo-suverennii-reiting",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-18T21:40:34.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Сбербанк: исламский банкинг не является конкурентом традиционному сегменту",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/17/1110764-sberbank-islamskii-banking",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-17T09:47:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Швейцария будет передавать США конфиденциальную финансовую информацию",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110724-shveitsariya-budet-peredavat",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-16T19:14:24.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ повысил курсы доллара и евро на 19 мая",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110695-tsb-povisil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-16T15:31:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ начал принимать заявки по расширенной программе «Семейный автомобиль»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110620-vtb-nachal-prinimat",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-16T13:13:30.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Суд в Москве взыскал с Euroclear Bank около 15 млрд рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110616-sud-vziskal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-16T12:44:28.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ: российские банки в I квартале защитили от мошенников 4,6 трлн рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110606-zaschitili-ot-moshennikov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-16T12:31:10.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Чистая прибыль Совкомбанка снизилась почти в два раза за I квартал",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110531-chistaya-pribil-sovkombanka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-16T08:33:52.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Средний объем ипотеки в России достиг рекордных 4,4 млн рублей на клиента",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/16/1110511-srednii-obem-ipoteki",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-16T07:27:29.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Русхимальянс» одержал победу над немецкими банками в войне антиисковых запретов",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/16/1110466-rushimalyans-oderzhal-pobedu-nad-nemetskimi-bankami",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-15T23:28:55.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Эксперимент по партнерскому финансированию могут продлить до 2030 года",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/16/1110461-eksperiment-po-partnerskomu-finansirovaniyu-mogut-prodlit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-15T23:28:01.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "АСВ: рост вкладов в России в I квартале 2025 года почти остановился",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/15/1110389-rost-vkladov-ostanovilsya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-15T15:25:11.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В МВД рассказали, как не попасть в базу дропперов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/15/1110350-kak-ne-popast",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-15T13:18:15.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Сбер» нарастил прибыль по РСБУ на 9,5% с начала 2025 года",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/15/1110226-sber-narastil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-15T07:32:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Баффетт рассказал о настороживших его проявлениях старения",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/15/1110207-baffet-rasskazal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Профучастники"
+          ],
+          "date": "2025-05-15T06:30:59.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Структуру «Волга-Днепра» обязали заплатить $200 млн ирландским лизингодателям",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/15/1110166-strukturu-volga-dnepra-obyazali-zaplatit-200-mln",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-14T22:11:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Дропперам ограничили объем переводов",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/15/1110157-dropperam-ogranichili-obem-perevodov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-14T21:19:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Объем торгов ОФЗ на вторичном биржевом рынке снизился до 29,24 млрд рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/14/1110145-obem-torgov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-14T19:06:43.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк России указал на риски блогерских ПИФов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/14/1110141-bank-rossii-ukazal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-14T18:41:01.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Венгерская OTP Group удвоила прибыль в России",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/14/1110133-otp-group-udvoila",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-14T17:39:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Чистая прибыль банка «Дом.РФ» с начала года увеличилась на 2%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/14/1110117-chistaya-pribil-banka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-14T16:09:07.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ выпустит монету к 100-летию «Артека»",
+          "link": "https://www.vedomosti.ru/society/news/2025/05/14/1110055-tsb-vipustit-monetu",
+          "content": "\"\"",
+          "categories": [
+            "Общество"
+          ],
+          "date": "2025-05-14T12:47:33.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Комитет Госдумы поддержал внедрение единого QR-кода",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/14/1110028-komitet-gosdumi-podderzhal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-14T11:08:33.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Аквариус» попросил Путина о мерах поддержки IT-компаний для выхода на биржу",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/14/1109930-akvarius-poprosil-putina-o-merah-podderzhki-it-kompanii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-13T23:31:09.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банки раскрыли спрос на семейную ипотеку на «вторичку»",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/14/1109921-banki-raskrili-spros-na-semeinuyu-ipoteku",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-13T23:12:50.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ проведет процедуру перевода в рубли валютных субординированных облигаций",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/13/1109889-vtb-provedet",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-13T17:56:51.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В Иране теперь можно расплачиваться банковскими картами «Мир»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/13/1109769-v-irane-teper",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-13T11:00:41.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Володин: Госдума рассмотрит законопроект по защите детей от мошенников",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/13/1109665-volodin-gosduma-rassmotrit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-13T05:22:57.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банки начали отменять комиссии для застройщиков по льготной ипотеке",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/13/1109617-banki-nachali-otmenyat-komissii-dlya-zastroischikov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-12T23:15:48.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ понизил курс евро на сразу на 2 рубля",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/12/1109572-tsb-ponizil-kurs",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-12T15:33:16.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ отменил обязательные комиссии для застройщиков по льготной ипотеке",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/12/1109479-vtb-otmenil-obyazatelnie-komissii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-12T10:50:56.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Сбербанк отменил комиссии для застройщиков по льготной ипотеке на «Домклик»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/12/1109442-sberbank-otmenil-komissii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-12T09:15:37.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Стоимость биткойна достигла $105 000 впервые с конца января",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/12/1109382-stoimost-bitkoina-dostigla",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-12T03:43:15.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "АРФГ назвала основные нарушения при продажах услуг в офисах банков",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/12/1109366-arfg-nazvala-osnovnie-narusheniya-pri-prodazhah-uslug-v-ofisah-bankov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-11T21:12:45.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банк ВТБ перестал взимать комиссию с застройщиков",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/08/1109063-vtb-perestal",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-08T09:58:35.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "РСА назвал количество купленных полисов ОСАГО на 24 часа",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/07/1108983-osago-24-chasa",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-07T15:04:08.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ установил курс доллара ниже 81 рубля на праздничные дни",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/07/1108979-tsb-kurs-dollara",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-07T14:58:34.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ и «Сбер» предупредили о возможных перебоях в работе банкоматов и терминалов",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/07/1108937-vtb-sber-predupredili",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-07T13:03:37.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Доля Райффайзенбанка в прибыли австрийской группы остается выше 50%",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/07/1108765-dolya-raiffaizenbanka-v-pribili-avstriiskoi-gruppi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-06T21:48:06.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ снизил курс доллара на 7 мая почти на рубль",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/06/1108695-tsb-snizil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-06T14:40:34.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ с начала 2025 года выявил 1638 компаний с признаками финансовых пирамид",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/06/1108557-viyavil-finansovih-piramid",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-06T09:08:45.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В Англии приостановили исполнение решения по делу «Крымэнерго» против России",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/06/1108534-anglii-priostanovili-delu-krimenergo",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-05-06T07:54:30.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Лизингодатели российских самолетов отказались от исков к страховщикам в Ирландии",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/05/06/1108471-lizingodateli-rossiiskih-samoletov-otkazalis-ot-iskov-k-strahovschikam-v-irlandii",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Страхование"
+          ],
+          "date": "2025-05-05T21:13:36.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ незначительно повысил курс доллара на 6 мая",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/05/1108404-tsb-povisil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-05-05T14:59:11.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ выпустит серебряную монету к 300-летию учреждения ордена Александра Невского",
+          "link": "https://www.vedomosti.ru/finance/news/2025/05/05/1108393-tsb-vipustit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-05-05T14:27:57.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Действие механизма продажи валютной выручки экспортерами будет продлено",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/30/1107893-deistvie-mehanizma-prodazhi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-30T19:00:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Норильский никель» разместил облигации на $200 млн по ставке 6,9%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/30/1107882-norilskii-nikel-razmestil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-04-30T17:41:42.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Home Credit не планирует продавать свою казахстанскую «дочку»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/30/1107858-home-credit-dochku",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-30T15:30:58.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Альфа-банк в 2024 году увеличил чистую прибыль по МСФО до 210 млрд рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/30/1107834-alfa-bank-uvelichil-pribil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-30T14:41:07.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ФАС возбудила дело в отношении Т-банка из-за нарушений в телерекламе",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/30/1107737-fas-vozbudila-delo",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-30T10:30:07.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ начал выдавать кредиты МСП по новым льготным условиям",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/30/1107666-vtb-nachal-vidavat",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-30T08:08:59.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В России снизилось число заемщиков с ипотекой и потребкредитами одновременно",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/30/1107611-v-rossii-snizilos-chislo-zaemschikov-s-ipotekoi-i-potrebkreditami-odnovremenno",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-29T22:03:42.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Рынок трансграничных расчетов накалился из-за недоверия",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/30/1107596-rinok-transgranichnih-raschetov-nakalilsya-iz-za-nedoveriya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-04-29T22:03:23.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Число заемщиков в России упало до минимума с 2022 года",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/29/1107473-zaemschikov-upalo-do-minimuma",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-29T13:53:35.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Банки стали выдавать больше кредитных карт заемщикам младше 20 лет",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/29/1107472-kart-zaemschikam-mladshe-20",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-29T11:43:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "К чему приведет отмена лимитов по IT-ипотеке",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/29/1107297-k-chemu-privedet-otmena-limitov-po-it-ipoteke",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T21:54:22.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "АСВ завершило расчеты с кредиторами «Киви банка»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107252-asv-zavershilo-rascheti",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T16:11:35.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ снизил официальный курс евро больше чем на рубль",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107243-tsb-ponizil-kurs",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T15:02:28.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "МФО выдали бизнесу почти 130 млрд рублей за 2024 год",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107184-mfo-vidali-biznesu",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Профучастники"
+          ],
+          "date": "2025-04-28T12:29:05.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ может выплатить дивиденды впервые с 2021 года",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107155-nablyudatelnii-sovet-vtb",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T12:26:00.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Минцифры отменило лимиты для банков по объему выдаваемых льготных ИТ-ипотек",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107097-mintsifri-otmenilo",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T09:32:41.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Казначейство может запустить госэквайринг для приема платежей учреждениями",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107092-kaznacheistvo-mozhet-zapustit",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-28T09:16:40.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ снизил минимальные суммы кредита по комбо-ипотеке в среднем на 10%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107056-vtb-snizil-minimalnie",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T07:47:07.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Чистая прибыль Сбербанка выросла на 9,7% с начала 2025 года",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/28/1107055-chistaya-pribil-sberbanka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-28T07:28:08.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Для дропперов введут уголовную ответственность",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/28/1107021-dlya-dropperov-vvedut-ugolovnuyu-otvetstvennost",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-27T22:20:35.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Что будет со вкладами после сохранения ключевой ставки на уровне 21%",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/28/1107010-chto-budet-so-vkladami",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-27T21:31:47.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Пошлина на экспорт подсолнечного масла в мае снизится до 4500 рублей за тонну",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/25/1106873-poshlina-masla-snizitsya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-25T19:32:09.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В венгерском OTP Bank с 1 мая сменится генеральный директор",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/25/1106835-otp-bank-smenitsya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-25T14:55:34.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Финуслуги» отмечают рост средней ставки по годовым вкладам на фоне заседания ЦБ",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/25/1106762-finuslugi-otmechayut-rost",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-25T11:36:56.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ сохранил прогноз по инфляции на уровне 7-8%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/25/1106747-tsb-sohranil-prognoz",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-25T11:10:41.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ четвертый раз подряд сохранил ключевую ставку на уровне 21%",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/25/1106714-tsb-chetvertii-raz-podryad",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-25T10:31:26.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Чистая прибыль ВТБ в I квартале увеличилась на 15%",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/25/1106679-chistaya-pribil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-25T07:43:35.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В ВТБ сравнили высокую ключевую ставку с приемом экспериментального антибиотика",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/25/1106627-vtb-sravnili-visokuyu-klyuchevuyu-stavku",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-25T07:00:39.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "РСХБ стал совладельцем Avito",
+          "link": "https://www.vedomosti.ru/business/articles/2025/04/25/1106637-rshb-stal-sovladeltsem-avito",
+          "content": "\"\"",
+          "categories": [
+            "Бизнес / Торговля и услуги"
+          ],
+          "date": "2025-04-24T21:55:43.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ впервые вводит прямые ограничения на выдачу ипотеки и автокредитов",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/24/1106599-tsb-vvodit-ogranicheniya",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T18:22:19.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В работе сервисов Т-банка произошел сбой",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106540-t-banka-sboi",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T14:37:25.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Кабмин одобрил проект об увеличении страховых выплат по безотзывным вкладам",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106531-kabmin-odobril-proekt",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-24T14:16:45.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ЦБ: граждане РФ с января по март перевели через СБП более 22,6 трлн рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106528-grazhdane-pereveli-sbp",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-24T13:41:24.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Мишустин: страховка по одному виду вклада увеличится до 2,8 млн рублей",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106495-mishustin-strahovka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T12:00:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Райффайзенбанк проиграл апелляцию по делу Strabag",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/24/1106467-raiffaizenbank-proigral-apellyatsiya-strabag",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T10:56:15.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Глава ВТБ пока не видит перспектив возвращения Visa и Mastercard в Россию",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106432-glava-vtb-poka",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-24T09:25:28.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Костин заявил о наличии оснований для снижения ключевой ставки ЦБ",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106428-kostin-zayavil",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T09:06:01.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Балчуг капитал» закрыла сделку по приобретению «дочки» Goldman Sachs в РФ",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106409-balchug-kapital-zakrila",
+          "content": "\"\"",
+          "categories": [
+            "Финансы"
+          ],
+          "date": "2025-04-24T08:13:35.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "ВТБ: «кредитного ренессанса» стоит ожидать не ранее второго полугодия 2026 года",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/24/1106396-vtb-kreditnii-renessans",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T07:42:10.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В ВТБ рассказали об отсутствии заработка по льготной ипотеке даже с комиссиями",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/24/1106349-vtb-rasskazali-ob-otsutstvii-zarabotka-po-lgotnoi-ipoteke",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Банки"
+          ],
+          "date": "2025-04-24T05:00:15.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "Коллекторы скупили у МФО рекордный для первых кварталов объем долгов",
+          "link": "https://www.vedomosti.ru/finance/articles/2025/04/24/1106352-kollektori-skupili-u-mfo-rekordnii-obem-dolgov",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Профучастники"
+          ],
+          "date": "2025-04-23T21:39:13.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В Сингапуре разгорелся арбитраж из-за срыва производства вакцины «Спутник лайт»",
+          "link": "https://www.vedomosti.ru/business/articles/2025/04/24/1106357-v-singapure-razgorelsya-arbitrazh-iz-za-sriva-proizvodstva-vaktsini-sputnik-lait",
+          "content": "\"\"",
+          "categories": [
+            "Бизнес / Торговля и услуги"
+          ],
+          "date": "2025-04-23T21:33:43.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "«Озон капитал» объявил о новых выпусках ЦФА на платформе «ЦФА хаб»",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/23/1106337-ozon-kapital",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-04-23T19:28:21.000Z"
+        }
+      },
+      {
+        "json": {
+          "title": "В «Сбере» прокомментировали идею создания криптобиржи",
+          "link": "https://www.vedomosti.ru/finance/news/2025/04/23/1106321-v-sbere-prokommentirovali",
+          "content": "\"\"",
+          "categories": [
+            "Финансы / Рынки"
+          ],
+          "date": "2025-04-23T17:10:56.000Z"
+        }
+      }
+    ]
+  },
+  "connections": {
+    "Edit Fields": {
+      "main": [
+        [
+          {
+            "node": "Limit1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields5": {
+      "main": [
+        [
+          {
+            "node": "Limit",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Merge": {
+      "main": [
+        [
+          {
+            "node": "Crypto",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Get html": {
+      "main": [
+        [
+          {
+            "node": "Parse content article",
+            "type": "main",
+            "index": 0
+          }
+        ],
+        []
+      ]
+    },
+    "Parse content article": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields1",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Crypto": {
+      "main": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Embeddings Ollama1": {
+      "ai_embedding": [
+        [
+          {
+            "node": "annotetion_to vec",
+            "type": "ai_embedding",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Default Data Loader": {
+      "ai_document": [
+        [
+          {
+            "node": "annotetion_to vec",
+            "type": "ai_document",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Recursive Character Text Splitter": {
+      "ai_textSplitter": [
+        [
+          {
+            "node": "Default Data Loader",
+            "type": "ai_textSplitter",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "annotetion_to vec": {
+      "main": [
+        [
+          {
+            "node": "save_total",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "summary_field": {
+      "main": [
+        [
+          {
+            "node": "annotetion_to vec",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Mistral Cloud Chat Model1": {
+      "ai_languageModel": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "ai_languageModel",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Summarization Chain": {
+      "main": [
+        [
+          {
+            "node": "summary_field",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ведомости финансы": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Schedule Trigger": {
+      "main": [
+        [
+          {
+            "node": "Ведомости финансы",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "Ведомости экономика",
+            "type": "main",
+            "index": 0
+          },
+          {
+            "node": "РБК",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Ведомости экономика": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields5",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Edit Fields1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit": {
+      "main": [
+        [
+          {
+            "node": "Get html",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "РБК": {
+      "main": [
+        [
+          {
+            "node": "Edit Fields",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Limit1": {
+      "main": [
+        [
+          {
+            "node": "Merge",
+            "type": "main",
+            "index": 1
+          }
+        ]
+      ]
+    },
+    "save_total": {
+      "main": [
+        [
+          {
+            "node": "Code",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Code": {
+      "main": [
+        [
+          {
+            "node": "Get Score",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    }
+  },
+  "active": false,
+  "settings": {
+    "executionOrder": "v1"
+  },
+  "versionId": "a781484a-7515-4191-bdcb-b54c95733648",
+  "meta": {
+    "templateCredsSetupCompleted": true,
+    "instanceId": "9fc94a3813456f1a5517186e02d6ca7107f2b3cb35cca26fac799a07001ddd4b"
+  },
+  "id": "RnE5XY6ArdtoT38A",
+  "tags": []
+}
