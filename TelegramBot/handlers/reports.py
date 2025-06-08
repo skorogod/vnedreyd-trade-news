@@ -103,4 +103,4 @@ def register_reports_handlers(dp: Dispatcher):
     dp.message.register(cmd_reports, Command(commands=["reports"]))
     dp.message.register(process_report_button, F.text == "📊 Сформировать отчет")
     dp.message.register(process_daily_report_button, F.text == "📈 Ежедневный отчет")
-    dp.callback_query.register(process_sector_report) 
+    dp.callback_query.register(process_sector_report, lambda c: c.data.startswith("report_")) 

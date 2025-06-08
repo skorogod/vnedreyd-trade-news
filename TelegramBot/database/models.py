@@ -21,7 +21,6 @@ class Sector(Base):
     
     id = Column(Integer, primary_key=True)
     name = Column(String, unique=True)
-    description = Column(String, nullable=True)
     
     # Связи
     users = relationship("User", secondary=user_sector, back_populates="sectors")

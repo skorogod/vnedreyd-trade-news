@@ -12,6 +12,8 @@ class WebSocketClient:
         self.bot = bot
         self.sio = socketio.AsyncClient()
         self.connected = False
+
+        print("socket url", settings.WEBSOCKET_URL)
         
         # Регистрируем обработчики событий
         @self.sio.event
