@@ -47,9 +47,10 @@ class ReportService:
                 "articlesHash": str
             }
         """
+        print(self.base_url)
         try:
             async with aiohttp.ClientSession() as session:
-                url = f"{self.base_url}/daily-summary"
+                url = f"{self.base_url}/report/daily-summary"
                 async with session.get(url) as response:
                     if response.status == 200:
                         return await response.json()
