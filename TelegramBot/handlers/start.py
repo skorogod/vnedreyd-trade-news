@@ -9,7 +9,7 @@ from aiogram.fsm.context import FSMContext
 
 
 async def cmd_start(message: types.Message, state: FSMContext):
-    state.clear()
+    await state.clear()
     user_id = message.from_user.id
     username = message.from_user.username
     sectors = await get_sectors()

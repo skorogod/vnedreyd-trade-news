@@ -42,26 +42,11 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        -160,
-        1740
+        300,
+        1815
       ],
       "id": "3e3a7998-f84e-47f9-b99f-9ae8bab92ca9",
       "name": "Edit Fields"
-    },
-    {
-      "parameters": {
-        "content": "## Data model\n```\n{\ntitle: text\nlink: text\ncontent: text\ndate: date\ncategories: [str]\nco\n}\n```",
-        "height": 200,
-        "width": 360
-      },
-      "type": "n8n-nodes-base.stickyNote",
-      "typeVersion": 1,
-      "position": [
-        40,
-        960
-      ],
-      "id": "67b0c7f2-597b-4091-9084-df542fbb4dff",
-      "name": "Sticky Note"
     },
     {
       "parameters": {},
@@ -69,7 +54,7 @@
       "typeVersion": 3.2,
       "position": [
         740,
-        1420
+        1640
       ],
       "id": "2f5c9c47-798b-4dc7-8a3c-56e5fddc13fe",
       "name": "Merge"
@@ -116,7 +101,7 @@
       "typeVersion": 3.4,
       "position": [
         -360,
-        1320
+        1540
       ],
       "id": "e7e47a88-5930-46f4-8481-422a6bb2645d",
       "name": "Edit Fields5"
@@ -130,7 +115,7 @@
       "typeVersion": 4.2,
       "position": [
         80,
-        1320
+        1540
       ],
       "id": "2d0513ad-c63a-4b54-83c2-c3e712500a18",
       "name": "Get html",
@@ -155,7 +140,7 @@
       "typeVersion": 1.2,
       "position": [
         300,
-        1320
+        1540
       ],
       "id": "b687c99a-f34c-4126-a76c-879232455126",
       "name": "Parse content article",
@@ -172,7 +157,7 @@
       "typeVersion": 1,
       "position": [
         960,
-        1420
+        1640
       ],
       "id": "ce8975c5-7a65-4887-92fd-a3f534ed16b8",
       "name": "Crypto"
@@ -184,8 +169,8 @@
       "type": "@n8n/n8n-nodes-langchain.embeddingsOllama",
       "typeVersion": 1,
       "position": [
-        1776,
-        1640
+        2436,
+        1860
       ],
       "id": "74fc8ce0-fc6c-4f86-97b7-d71e71d36e09",
       "name": "Embeddings Ollama1",
@@ -203,8 +188,8 @@
       "type": "@n8n/n8n-nodes-langchain.documentDefaultDataLoader",
       "typeVersion": 1,
       "position": [
-        1896,
-        1642.5
+        2556,
+        1862.5
       ],
       "id": "87c20a15-e622-49bd-ad8e-920844b5f082",
       "name": "Default Data Loader"
@@ -217,8 +202,8 @@
       "type": "@n8n/n8n-nodes-langchain.textSplitterRecursiveCharacterTextSplitter",
       "typeVersion": 1,
       "position": [
-        1984,
-        1840
+        2644,
+        2060
       ],
       "id": "92a471f8-ceca-4f76-9ab7-3ac318b9013f",
       "name": "Recursive Character Text Splitter"
@@ -233,8 +218,8 @@
       "type": "@n8n/n8n-nodes-langchain.vectorStorePGVector",
       "typeVersion": 1.2,
       "position": [
-        1792,
-        1420
+        2452,
+        1640
       ],
       "id": "311837c6-25aa-4c84-996d-9c87922e54ff",
       "name": "annotetion_to vec",
@@ -255,19 +240,18 @@
         },
         "table": {
           "__rl": true,
-          "value": "articles_top",
+          "value": "article",
           "mode": "name"
         },
         "columns": {
           "mappingMode": "defineBelow",
           "value": {
-            "id": "={{ $('Crypto').item.json.UUID }}",
-            "title": "={{ $('Merge').item.json.title }}",
-            "link": "={{ $('Merge').item.json.link }}",
-            "content": "={{ $('Crypto').item.json.content }}",
-            "date": "={{ $('Merge').item.json.date }}",
-            "categories": "={{ $('Merge').item.json.categories }}",
-            "summary": "={{ $('summary_field').item.json.summary }}"
+            "content": "={{ $('summary_field').item.json.summary }}",
+            "score": "={{ $json.score }}",
+            "date": "={{ $json.date }}",
+            "title": "={{ $json.title }}",
+            "link": "={{ $json.link }}",
+            "sectors": "={{ $json.categories }}"
           },
           "matchingColumns": [
             "id"
@@ -276,8 +260,18 @@
             {
               "id": "id",
               "displayName": "id",
-              "required": true,
+              "required": false,
               "defaultMatch": true,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": true
+            },
+            {
+              "id": "content",
+              "displayName": "content",
+              "required": true,
+              "defaultMatch": false,
               "display": true,
               "type": "string",
               "canBeUsedToMatch": true,
@@ -286,56 +280,52 @@
             {
               "id": "title",
               "displayName": "title",
-              "required": false,
+              "required": true,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "content",
-              "displayName": "content",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
-            },
-            {
-              "id": "summary",
-              "displayName": "summary",
-              "required": false,
-              "defaultMatch": false,
-              "display": true,
-              "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "link",
               "displayName": "link",
-              "required": false,
+              "required": true,
               "defaultMatch": false,
               "display": true,
               "type": "string",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
-              "id": "categories",
-              "displayName": "categories",
-              "required": false,
+              "id": "sectors",
+              "displayName": "sectors",
+              "required": true,
               "defaultMatch": false,
               "display": true,
               "type": "array",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
             },
             {
               "id": "date",
               "displayName": "date",
-              "required": false,
+              "required": true,
               "defaultMatch": false,
               "display": true,
               "type": "dateTime",
-              "canBeUsedToMatch": true
+              "canBeUsedToMatch": true,
+              "removed": false
+            },
+            {
+              "id": "score",
+              "displayName": "score",
+              "required": false,
+              "defaultMatch": false,
+              "display": true,
+              "type": "number",
+              "canBeUsedToMatch": true,
+              "removed": false
             }
           ],
           "attemptToConvertTypes": false,
@@ -346,8 +336,8 @@
       "type": "n8n-nodes-base.postgres",
       "typeVersion": 2.6,
       "position": [
-        2340,
-        1380
+        3152,
+        1640
       ],
       "id": "e6fe02cb-c9cb-40ab-8628-e6772716e72f",
       "name": "save_total",
@@ -357,7 +347,7 @@
           "name": "Postgres account"
         }
       },
-      "onError": "continueErrorOutput"
+      "onError": "continueRegularOutput"
     },
     {
       "parameters": {
@@ -376,8 +366,8 @@
       "type": "n8n-nodes-base.set",
       "typeVersion": 3.4,
       "position": [
-        1556,
-        1420
+        2216,
+        1640
       ],
       "id": "6ef2842b-03af-4ef1-abb7-af8825c0d075",
       "name": "summary_field",
@@ -398,8 +388,8 @@
       "type": "@n8n/n8n-nodes-langchain.chainSummarization",
       "typeVersion": 2.1,
       "position": [
-        1180,
-        1420
+        1840,
+        1640
       ],
       "id": "aa936c2a-5f50-49bf-bd52-8d384619635f",
       "name": "Summarization Chain"
@@ -411,8 +401,8 @@
       "type": "@n8n/n8n-nodes-langchain.lmChatMistralCloud",
       "typeVersion": 1,
       "position": [
-        1268,
-        1640
+        1928,
+        1860
       ],
       "id": "3d49a546-b5ea-4ad4-ac92-10d5ccb48bd8",
       "name": "Mistral Cloud Chat Model1",
@@ -432,7 +422,7 @@
       "typeVersion": 1.1,
       "position": [
         -580,
-        1220
+        1440
       ],
       "id": "4db4572c-44bc-4a9d-ae9a-bb58fbb3ed54",
       "name": "Ведомости финансы"
@@ -452,7 +442,7 @@
       "typeVersion": 1.2,
       "position": [
         -800,
-        1420
+        1640
       ],
       "id": "d016c991-eca3-408d-9a8c-768094ab4a7f",
       "name": "Schedule Trigger"
@@ -466,7 +456,7 @@
       "typeVersion": 1.1,
       "position": [
         -580,
-        1420
+        1640
       ],
       "id": "0d12caa5-3922-473d-ac1e-00ee530e7ccc",
       "name": "Ведомости экономика"
@@ -513,7 +503,7 @@
       "typeVersion": 3.4,
       "position": [
         520,
-        1320
+        1540
       ],
       "id": "009521a7-72c0-4848-a603-3c763131167e",
       "name": "Edit Fields1"
@@ -526,7 +516,7 @@
       "typeVersion": 1,
       "position": [
         -140,
-        1320
+        1540
       ],
       "id": "8e5e97d6-3ec7-44dc-af62-45fb1e4a2dbe",
       "name": "Limit"
@@ -539,8 +529,8 @@
       "type": "n8n-nodes-base.rssFeedRead",
       "typeVersion": 1.1,
       "position": [
-        -460,
-        1740
+        80,
+        1815
       ],
       "id": "b81acc63-8f97-4310-b0f9-86b3a50c83b7",
       "name": "РБК"
@@ -552,32 +542,32 @@
       "type": "n8n-nodes-base.limit",
       "typeVersion": 1,
       "position": [
-        100,
-        1720
+        520,
+        1815
       ],
       "id": "c94e9621-8b56-497f-9f8d-d6e6efe27b15",
       "name": "Limit1"
     },
     {
       "parameters": {
-        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nfor (const item of $input.all()) {\n  console.log($input.all())\n}\n\nreturn $input.all();"
-      },
-      "type": "n8n-nodes-base.code",
-      "typeVersion": 2,
-      "position": [
-        2660,
-        1260
-      ],
-      "id": "c023d3ef-380b-4702-b25f-621a10c1aea6",
-      "name": "Code"
-    },
-    {
-      "parameters": {
-        "url": "http://score:8000",
+        "method": "POST",
+        "url": "http://10.10.144.2:8000/score",
         "sendHeaders": true,
         "headerParameters": {
           "parameters": [
-            {}
+            {
+              "name": "Content-Type",
+              "value": "application/json"
+            }
+          ]
+        },
+        "sendBody": true,
+        "bodyParameters": {
+          "parameters": [
+            {
+              "name": "text",
+              "value": "={{ $('Merge').item.json.content }}"
+            }
           ]
         },
         "options": {}
@@ -585,11 +575,106 @@
       "type": "n8n-nodes-base.httpRequest",
       "typeVersion": 4.2,
       "position": [
-        2880,
-        1260
+        1180,
+        1640
       ],
-      "id": "1acb49a3-cf99-42ea-a367-f90309ed08a2",
+      "id": "364f0687-ba20-4455-90ab-bc3db88d2d9d",
       "name": "Get Score"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "08a78750-78f6-4bff-bf32-3b726820244b",
+              "name": "status",
+              "value": "={{ $json.status }}",
+              "type": "string"
+            },
+            {
+              "id": "edf53ef5-f559-441e-a1c8-a88671dd21d5",
+              "name": "score",
+              "value": "={{ $json.score }}",
+              "type": "number"
+            },
+            {
+              "id": "9187321c-c924-4023-bc36-db8149d2d136",
+              "name": "content",
+              "value": "={{ $('Merge').item.json.content }}",
+              "type": "string"
+            },
+            {
+              "id": "2ce4d12c-8fa9-4f0f-8495-112023b6599b",
+              "name": "title",
+              "value": "={{ $('Merge').item.json.title }}",
+              "type": "string"
+            },
+            {
+              "id": "3e787b70-5d9d-48f5-bb6c-629a0f003ef8",
+              "name": "link",
+              "value": "={{ $('Merge').item.json.link }}",
+              "type": "string"
+            },
+            {
+              "id": "941dcd40-8bc3-44a5-baf6-70fd562b32e3",
+              "name": "categories",
+              "value": "={{ $('Merge').item.json.categories }}",
+              "type": "array"
+            },
+            {
+              "id": "3af7b100-a079-4fdf-80df-5d5a1a6b0c7b",
+              "name": "date",
+              "value": "={{ $('Merge').item.json.date }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1400,
+        1640
+      ],
+      "id": "e2e51370-76b1-4850-96fe-b0ac84dc7f71",
+      "name": "DataFrame"
+    },
+    {
+      "parameters": {
+        "assignments": {
+          "assignments": [
+            {
+              "id": "2fca463d-3818-4355-a2b4-e9e25726f595",
+              "name": "content",
+              "value": "={{ $('Merge').item.json.content }}",
+              "type": "string"
+            }
+          ]
+        },
+        "options": {}
+      },
+      "type": "n8n-nodes-base.set",
+      "typeVersion": 3.4,
+      "position": [
+        1620,
+        1640
+      ],
+      "id": "52e37df3-30c0-46ce-a966-ceafb5ea883c",
+      "name": "get content"
+    },
+    {
+      "parameters": {
+        "jsCode": "// Loop over input items and add a new field called 'myNewField' to the JSON of each one\nconst res = []\nfor (const item of $('DataFrame').all()) {\n  let helper = {}\n\n  helper[\"content\"] = item.json.content\n  helper[\"score\"] = item.json.score\n  helper[\"status\"] = item.json.status\n  helper[\"date\"] = item.json.date\n  helper[\"title\"] = item.json.title\n  helper[\"link\"] = item.json.link\n  if (item.json.categories.includes(\"Финансы / Рынки\") || item.json.categories.includes(\"Финансы / Банки\") || item.json.categories.includes(\"Финансы\")) {\n    helper[\"categories\"] = [3]\n  } else if (item.json.categories.includes(\"Политика\")) {\n    helper[\"categories\"] = [3, 10]\n  } else if (item.json.categories.includes(\"Общество\")) {\n    helper[\"categories\"] = [6, 1]\n  } else {\n    helper[\"categories\"] = [7]\n  }\n  res.push(helper)\n}\nconsole.log(123);\nconsole.log(res)\n\nreturn res;"
+      },
+      "type": "n8n-nodes-base.code",
+      "typeVersion": 2,
+      "position": [
+        2932,
+        1640
+      ],
+      "id": "74ece1bd-3c17-4ebf-a78e-a23de1832391",
+      "name": "Frame"
     }
   ],
   "pinData": {
@@ -2857,7 +2942,7 @@
       "main": [
         [
           {
-            "node": "Summarization Chain",
+            "node": "Get Score",
             "type": "main",
             "index": 0
           }
@@ -2901,7 +2986,7 @@
       "main": [
         [
           {
-            "node": "save_total",
+            "node": "Frame",
             "type": "main",
             "index": 0
           }
@@ -3030,20 +3115,48 @@
     },
     "save_total": {
       "main": [
+        [],
+        []
+      ]
+    },
+    "Get Score": {
+      "main": [
         [
           {
-            "node": "Code",
+            "node": "DataFrame",
             "type": "main",
             "index": 0
           }
         ]
       ]
     },
-    "Code": {
+    "DataFrame": {
       "main": [
         [
           {
-            "node": "Get Score",
+            "node": "get content",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "get content": {
+      "main": [
+        [
+          {
+            "node": "Summarization Chain",
+            "type": "main",
+            "index": 0
+          }
+        ]
+      ]
+    },
+    "Frame": {
+      "main": [
+        [
+          {
+            "node": "save_total",
             "type": "main",
             "index": 0
           }
@@ -3051,11 +3164,11 @@
       ]
     }
   },
-  "active": false,
+  "active": true,
   "settings": {
     "executionOrder": "v1"
   },
-  "versionId": "a781484a-7515-4191-bdcb-b54c95733648",
+  "versionId": "9f74be8e-861b-4dd4-ab32-2a0a7100c9e9",
   "meta": {
     "templateCredsSetupCompleted": true,
     "instanceId": "9fc94a3813456f1a5517186e02d6ca7107f2b3cb35cca26fac799a07001ddd4b"
